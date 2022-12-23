@@ -10,7 +10,7 @@
 
 
 #ifndef BUFFER_SIZE
-#define BUFFER_SIZE 8
+#define BUFFER_SIZE 1
 #endif
 char	*ft_substr(char *s, unsigned int start, size_t len);
 size_t	ft_strlen(const char *c);

@@ -90,27 +90,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	str[i] = '\0';
 	return (str);
 }
-char	*ft_strdup(const char *s)
-{
-	int		i;
-	int		len;
-	char	*ptr;
-
-	i = 0;
-	len = ft_strlen(s);
-	if (!s)
-		return (NULL);
-	ptr = (char *)malloc((len + 1) * sizeof(char));
-	if (!ptr)
-		return (NULL);
-	while (s[i])
-	{
-		ptr[i] = s[i];
-		i++;
-	}
-	ptr[i] = '\0';
-	return (ptr);
-}
 
 int	ft_strchr(char *str, int c)
 {
@@ -128,6 +107,7 @@ char *get_line(char *saved)
 {
 	int j = 0;
 	char *line;
+	char *lst_line;
 	if(!saved || saved[0] == '\0')
 		return NULL;
 	while(saved[j] != '\0')
@@ -139,13 +119,16 @@ char *get_line(char *saved)
 			}
 			j++;
 		}
-	return saved;	
+	lst_line = ft_substr(saved, 0, ft_strlen(saved));
+	free(saved);
+	saved = ft_calloc(1,1);
+	return lst_line;	
 }
 char *update_saved(char *saved)
 {
 	int j = 0;
-	// if(saved[0] == '\0')
-	// 	return NULL;
+	if(saved[0] == '\0')
+		return NULL;
 	while(saved[j])
 	{
 		if (saved[j] == '\n')
@@ -163,7 +146,6 @@ char *get_rd(char *saved, int fd)
 {
 	int rd = 1;
 	char *buffer;
-	char *lst_line;
 	buffer = malloc(BUFFER_SIZE +1);
 	int i = 0;
 	while (rd > 0)
@@ -183,12 +165,6 @@ char *get_rd(char *saved, int fd)
 		i++;
 	}	
 	free(buffer);
-	if(rd == 0 && !buffer[0])
-	{
-		lst_line = get_line(saved);
-		// saved = update_saved(saved);
-		return lst_line;
-	}
 	return saved;
 }
 
@@ -198,20 +174,13 @@ char *get_next_line(int fd)
 	char *line;
 
 	line = NULL;
-	int j;
 	if(fd < 0 || BUFFER_SIZE <= 0)
 		return NULL;
-
 	saved = get_rd(saved, fd);
-	j = 0;
 	line = get_line(saved);
-	if (!line)
+	if (!line || line[0] == '\0')
 		return(NULL);
 	saved = update_saved(saved);
-	if (!saved)
-		return(NULL);
-	if(line[0] == '\0')
-		return NULL;
 	return line;
 }
 
@@ -220,12 +189,11 @@ int main(void)
 	int fd = open("text.txt", O_RDONLY);
 	char *line = get_next_line(fd);
 	int i = 1;
-	while(i < 240)
+	while(line)
 	{
 		red();
 		printf("%d line :)", i);
 		yellow(); 
-		// printf("%s", line);
 		printf("%s", line);
 		line = get_next_line(fd);
 		i++;
