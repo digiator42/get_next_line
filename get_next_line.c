@@ -1,102 +1,4 @@
 #include "get_next_line.h"
-#include <string.h>
-#include <stdlib.h>
-
-size_t	ft_strlen(const char *c)
-{
-	size_t	i;
-
-	i = 0;
-	if(c){
-	while (c[i] != '\0')
-		i++;
-	}
-	else
-	 return 0;
-	return (i);
-}
-
-void red () {
-  printf("\033[1;31m");
-}
-
-void yellow() {
-  printf("\033[1;33m");
-}
-void green() {
-  printf("\033[0;32m");
-}
-
-void reset () {
-  printf("\033[0m");
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	unsigned int	i;
-	char			*c;
-
-	c = (char *)s;
-	i = 0;
-	while (i < n)
-	{
-		c[i] = '\0';
-		i++;
-	}
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	void	*ptr;
-
-	ptr = malloc(nmemb * size);
-	if (!ptr){
-		free(ptr);
-		return (NULL);
-	}
-	ft_bzero(ptr, nmemb * size);
-	return (ptr);
-}
-
-char	*merging(char *joined, char *str1, char *str2)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (str1[i])
-	{
-		joined[i] = str1[i];
-		i++;
-		j++;
-	}
-	i = 0;
-	while (str2[i])
-	{
-		joined[j] = str2[i];
-		i++;
-		j++;
-	}
-	joined[j] = '\0';
-	free(str1);
-	return (joined);
-}
-
-char	*ft_strjoin(char *str1, char *str2)
-{
-	char	*joined;
-
-	if (!str1)
-		str1 = (char *)ft_calloc(sizeof(char), 1);
-	if (!str1 || !str2)
-		return (NULL);
-	joined = (char *)malloc((ft_strlen(str1) + ft_strlen(str2) + 1));
-	if (!joined)
-		return (NULL);
-	joined = merging(joined, str1, str2);
-	return (joined);
-}
 
 int	ft_strchr(char *str, int c)
 {
@@ -205,12 +107,9 @@ char *get_next_line(int fd)
 // 	int fd = open("text.txt", O_RDONLY);
 // 	char *line = get_next_line(fd);
 // 	int i = 1;
-// 	check_leaks();
 // 	while(line)
 // 	{
-// 		// red();
 // 		printf("%d line :)", i);
-// 		// yellow(); 
 // 		printf("%s", line);
 // 		free(line);
 // 		line = get_next_line(fd);
