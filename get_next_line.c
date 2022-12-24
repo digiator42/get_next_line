@@ -50,45 +50,52 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	void	*ptr;
 
 	ptr = malloc(nmemb * size);
-	if (!ptr)
+	if (!ptr){
+		free(ptr);
 		return (NULL);
+	}
 	ft_bzero(ptr, nmemb * size);
 	return (ptr);
 }
 
-
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*merging(char *joined, char *str1, char *str2)
 {
-	char	*str;
-	size_t	i;
-	size_t	j;
+	int	i;
+	int	j;
 
-	if (!s1 && !s2)
-		return (NULL);
-	str = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!str)
-		return (NULL);
 	i = 0;
 	j = 0;
-	if(s1)
+	while (str1[i])
 	{
-		while (s1[i])
-		{
-			str[i] = s1[i];
-			i++;
-		}
+		joined[i] = str1[i];
+		i++;
+		j++;
 	}
-	if(s2)
+	i = 0;
+	while (str2[i])
 	{
-		while (s2[j])
-			{
-				str[i] = s2[j];
-				i++;
-				j++;
-			}
+		joined[j] = str2[i];
+		i++;
+		j++;
 	}
-	str[i] = '\0';
-	return (str);
+	joined[j] = '\0';
+	free(str1);
+	return (joined);
+}
+
+char	*ft_strjoin(char *str1, char *str2)
+{
+	char	*joined;
+
+	if (!str1)
+		str1 = (char *)ft_calloc(sizeof(char), 1);
+	if (!str1 || !str2)
+		return (NULL);
+	joined = (char *)malloc((ft_strlen(str1) + ft_strlen(str2) + 1));
+	if (!joined)
+		return (NULL);
+	joined = merging(joined, str1, str2);
+	return (joined);
 }
 
 int	ft_strchr(char *str, int c)
@@ -121,32 +128,32 @@ char *get_line(char *saved)
 		}
 	lst_line = ft_substr(saved, 0, ft_strlen(saved));
 	free(saved);
-	saved = ft_calloc(1,1);
+	saved = NULL;
 	return lst_line;	
 }
 char *update_saved(char *saved)
 {
 	int j = 0;
-	if(saved[0] == '\0')
+	char *hold;
+	if(!saved[0])
 		return NULL;
 	while(saved[j])
 	{
 		if (saved[j] == '\n')
 		{
 			size_t len = ft_strlen(saved);
-			saved = ft_substr(saved, j+1, len);
-			return saved;
+			hold = ft_substr(saved, j+1, len);
+			free(saved);
+			return hold;
 		}
 		j++;
 	}
-	return saved;	
+	return NULL;	
 }
 
-char *get_rd(char *saved, int fd)
+char *get_rd(char *saved,char *buffer, int fd)
 {
 	int rd = 1;
-	char *buffer;
-	buffer = malloc(BUFFER_SIZE +1);
 	int i = 0;
 	while (rd > 0)
 	{
@@ -159,6 +166,8 @@ char *get_rd(char *saved, int fd)
 			return NULL;
 		}
 		buffer[rd] = '\0';
+		if(!buffer[0])
+			break;
 		saved = ft_strjoin(saved, buffer);
 		if(ft_strchr(saved, '\n') == 0)
 			break;
@@ -172,31 +181,41 @@ char *get_next_line(int fd)
 {
 	static char *saved;
 	char *line;
-
-	line = NULL;
-	if(fd < 0 || BUFFER_SIZE <= 0)
+	char *buffer;
+	
+	if(fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= __INT_MAX__)
 		return NULL;
-	saved = get_rd(saved, fd);
+	buffer = malloc((BUFFER_SIZE +1) * sizeof(char));
+	line = NULL;
+	saved = get_rd(saved, buffer, fd);
 	line = get_line(saved);
 	if (!line || line[0] == '\0')
+	{
+		if(saved)
+			free(saved);
+		free(line);
 		return(NULL);
+	}
 	saved = update_saved(saved);
 	return line;
 }
 
-int main(void)
-{
-	int fd = open("text.txt", O_RDONLY);
-	char *line = get_next_line(fd);
-	int i = 1;
-	while(line)
-	{
-		red();
-		printf("%d line :)", i);
-		yellow(); 
-		printf("%s", line);
-		line = get_next_line(fd);
-		i++;
-	}
-}
+// int main(void)
+// {
+// 	int fd = open("text.txt", O_RDONLY);
+// 	char *line = get_next_line(fd);
+// 	int i = 1;
+// 	check_leaks();
+// 	while(line)
+// 	{
+// 		// red();
+// 		printf("%d line :)", i);
+// 		// yellow(); 
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(fd);
+// 		i++;
+// 	}
+// 	free(line);
+// }
 
