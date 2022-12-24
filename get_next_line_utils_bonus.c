@@ -1,16 +1,17 @@
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlen(const char *c)
 {
 	size_t	i;
 
 	i = 0;
-	if(c){
-	while (c[i] != '\0')
-		i++;
+	if (c)
+	{
+		while (c[i] != '\0')
+			i++;
 	}
 	else
-	 return 0;
+		return (0);
 	return (i);
 }
 
@@ -33,7 +34,8 @@ void	*ft_calloc(size_t count, size_t size)
 	void	*ptr;
 
 	ptr = malloc(count * size);
-	if (!ptr){
+	if (!ptr)
+	{
 		free(ptr);
 		return (NULL);
 	}
@@ -83,9 +85,9 @@ char	*ft_strjoin(char *str1, char *str2)
 
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {
-	char	*substr;
-	size_t	slen;
-	size_t	i;
+	char *substr;
+	size_t slen;
+	size_t i;
 
 	if (!s)
 		return (NULL);

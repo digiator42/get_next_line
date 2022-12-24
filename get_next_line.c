@@ -8,99 +8,106 @@ int	ft_strchr(char *str, int c)
 	while (str[i] && str[i] != c)
 		i++;
 	if (str[i] == c)
-		return 0;
+		return (0);
 	return (1);
 }
 
-char *get_line(char *saved)
+char	*get_line(char *saved)
 {
-	int j = 0;
-	char *line;
-	char *lst_line;
-	if(!saved || saved[0] == '\0')
-		return NULL;
-	while(saved[j] != '\0')
-		{
-			if (saved[j] == '\n')
-			{
-				line = ft_substr(saved, 0, j+1);
-				return line;
-			}
-			j++;
-		}
-	lst_line = ft_substr(saved, 0, ft_strlen(saved));
-	free(saved);
-	saved = NULL;
-	return lst_line;	
-}
-char *update_saved(char *saved)
-{
-	int j = 0;
-	char *hold;
-	if(!saved[0])
-		return NULL;
-	while(saved[j])
+	int		j;
+	char	*line;
+	char	*lst_line;
+
+	j = 0;
+	if (!saved || saved[0] == '\0')
+		return (NULL);
+	while (saved[j] != '\0')
 	{
 		if (saved[j] == '\n')
 		{
-			size_t len = ft_strlen(saved);
-			hold = ft_substr(saved, j+1, len);
-			free(saved);
-			return hold;
+			line = ft_substr(saved, 0, j + 1);
+			return (line);
 		}
 		j++;
 	}
-	return NULL;	
+	lst_line = ft_substr(saved, 0, ft_strlen(saved));
+	free(saved);
+	saved = NULL;
+	return (lst_line);
+}
+char	*update_saved(char *saved)
+{
+	int		j;
+	char	*hold;
+	size_t	len;
+
+	j = 0;
+	if (!saved[0])
+		return (NULL);
+	while (saved[j])
+	{
+		if (saved[j] == '\n')
+		{
+			len = ft_strlen(saved);
+			hold = ft_substr(saved, j + 1, len);
+			free(saved);
+			return (hold);
+		}
+		j++;
+	}
+	return (NULL);
 }
 
-char *get_rd(char *saved, int fd)
+char	*get_rd(char *saved, int fd)
 {
-	int rd = 1;
-	int i = 0;
-	char *buffer;
+	int		rd;
+	int		i;
+	char	*buffer;
 
-	buffer = malloc((BUFFER_SIZE +1) * sizeof(char));
+	rd = 1;
+	i = 0;
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	while (rd > 0)
 	{
 		rd = read(fd, buffer, BUFFER_SIZE);
-		if(rd == -1)
+		if (rd == -1)
 		{
 			free(saved);
 			saved = NULL;
 			free(buffer);
-			return NULL;
+			return (NULL);
 		}
 		buffer[rd] = '\0';
-		if(!buffer[0])
-			break;
+		if (!buffer[0])
+			break ;
 		saved = ft_strjoin(saved, buffer);
-		if(ft_strchr(saved, '\n') == 0)
-			break;
+		if (ft_strchr(saved, '\n') == 0)
+			break ;
 		i++;
-	}	
+	}
 	free(buffer);
-	return saved;
+	return (saved);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	static char *saved;
-	char *line;
-	
-	if(fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= __INT_MAX__)
-		return NULL;
+	static char	*saved;
+	char		*line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= __INT_MAX__)
+		return (NULL);
 	line = NULL;
 	saved = get_rd(saved, fd);
 	line = get_line(saved);
 	if (!line || line[0] == '\0')
 	{
-		if(saved)
+		if (saved)
 			free(saved);
 		free(line);
-		return(NULL);
+		return (NULL);
 	}
 	saved = update_saved(saved);
-	return line;
+	return (line);
 }
 
 // int main(void)
@@ -118,4 +125,3 @@ char *get_next_line(int fd)
 // 	}
 // 	free(line);
 // }
-
