@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahassan <ahassan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/25 14:29:57 by ahassan           #+#    #+#             */
+/*   Updated: 2022/12/25 14:31:11 by ahassan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 int	ft_strchr(char *str, int c)
@@ -35,6 +47,7 @@ char	*get_line(char *saved)
 	saved = NULL;
 	return (lst_line);
 }
+
 char	*update_saved(char *saved)
 {
 	int		j;
@@ -61,11 +74,9 @@ char	*update_saved(char *saved)
 char	*get_rd(char *saved, int fd)
 {
 	int		rd;
-	int		i;
 	char	*buffer;
 
 	rd = 1;
-	i = 0;
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	while (rd > 0)
 	{
@@ -74,8 +85,7 @@ char	*get_rd(char *saved, int fd)
 		{
 			free(saved);
 			saved = NULL;
-			free(buffer);
-			return (NULL);
+			return (free(buffer), NULL);
 		}
 		buffer[rd] = '\0';
 		if (!buffer[0])
@@ -83,10 +93,8 @@ char	*get_rd(char *saved, int fd)
 		saved = ft_strjoin(saved, buffer);
 		if (ft_strchr(saved, '\n') == 0)
 			break ;
-		i++;
 	}
-	free(buffer);
-	return (saved);
+	return (free(buffer), saved);
 }
 
 char	*get_next_line(int fd)

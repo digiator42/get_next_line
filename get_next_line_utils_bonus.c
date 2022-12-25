@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ahassan <ahassan@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/25 14:29:52 by ahassan           #+#    #+#             */
+/*   Updated: 2022/12/25 14:38:41 by ahassan          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line_bonus.h"
 
 size_t	ft_strlen(const char *c)
@@ -43,51 +55,36 @@ void	*ft_calloc(size_t count, size_t size)
 	return (ptr);
 }
 
-char	*merging(char *joined, char *saved, char *buffer)
+char	*ft_strjoin(char *saved, char *buffer)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*joined;
 
 	i = 0;
 	j = 0;
+	if (!saved)
+		saved = (char *)ft_calloc(sizeof(char), 1);
+	if (!saved || !buffer)
+		return (NULL);
+	joined = (char *)malloc((ft_strlen(saved) + ft_strlen(buffer) + 1));
+	if (!joined)
+		return (NULL);
 	while (saved[i])
-	{
-		joined[i] = saved[i];
-		i++;
-		j++;
-	}
+		joined[j++] = saved[i++];
 	i = 0;
 	while (buffer[i])
-	{
-		joined[j] = buffer[i];
-		i++;
-		j++;
-	}
+		joined[j++] = buffer[i++];
 	joined[j] = '\0';
 	free(saved);
 	return (joined);
 }
 
-char	*ft_strjoin(char *str1, char *str2)
-{
-	char	*joined;
-
-	if (!str1)
-		str1 = (char *)ft_calloc(sizeof(char), 1);
-	if (!str1 || !str2)
-		return (NULL);
-	joined = (char *)malloc((ft_strlen(str1) + ft_strlen(str2) + 1));
-	if (!joined)
-		return (NULL);
-	joined = merging(joined, str1, str2);
-	return (joined);
-}
-
 char	*ft_substr(char *s, unsigned int start, size_t len)
 {
-	char *substr;
-	size_t slen;
-	size_t i;
+	char	*substr;
+	size_t	slen;
+	size_t	i;
 
 	if (!s)
 		return (NULL);
