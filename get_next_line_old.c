@@ -6,7 +6,7 @@
 /*   By: ahassan <ahassan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/25 20:15:01 by ahassan           #+#    #+#             */
-/*   Updated: 2022/12/25 22:27:17 by ahassan          ###   ########.fr       */
+/*   Updated: 2022/12/25 20:55:58 by ahassan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,11 +104,14 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = NULL;
 	saved = get_rd(saved, fd);
-	if (!saved)
-		return (NULL);
 	line = get_line(saved);
-	if (!line)
+	if (!line || line[0] == '\0')
+	{
+		if (saved)
+			free(saved);
+		free(line);
 		return (NULL);
+	}
 	saved = update_saved(saved);
 	return (line);
 }

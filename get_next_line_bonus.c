@@ -6,7 +6,7 @@
 /*   By: ahassan <ahassan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/25 14:29:40 by ahassan           #+#    #+#             */
-/*   Updated: 2022/12/25 20:13:31 by ahassan          ###   ########.fr       */
+/*   Updated: 2022/12/25 22:25:53 by ahassan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,21 +95,18 @@ char	*get_rd(char *saved, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	*saved[OPEN_MAX];
+	static char	*saved[10240];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= __INT_MAX__)
 		return (NULL);
 	line = NULL;
 	saved[fd] = get_rd(saved[fd], fd);
-	line = get_line(saved[fd]);
-	if (!line || line[0] == '\0')
-	{
-		if (saved[fd])
-			free(saved[fd]);
-		free(line);
+	if (!saved[fd])
 		return (NULL);
-	}
+	line = get_line(saved[fd]);
+	if (!line)
+		return (NULL);
 	saved[fd] = update_saved(saved[fd]);
 	return (line);
 }

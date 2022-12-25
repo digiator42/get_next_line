@@ -6,7 +6,7 @@
 /*   By: ahassan <ahassan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/25 14:29:54 by ahassan           #+#    #+#             */
-/*   Updated: 2022/12/25 20:22:39 by ahassan          ###   ########.fr       */
+/*   Updated: 2022/12/25 22:23:46 by ahassan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,5 +97,10 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	while (start < slen && len > i)
 		substr[i++] = s[start++];
 	substr[i] = '\0';
+	if (!substr[0])
+	{
+		free(substr);
+		return (NULL);
+	}
 	return (substr);
 }
