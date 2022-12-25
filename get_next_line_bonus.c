@@ -6,7 +6,7 @@
 /*   By: ahassan <ahassan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/25 14:29:40 by ahassan           #+#    #+#             */
-/*   Updated: 2022/12/25 14:31:45 by ahassan          ###   ########.fr       */
+/*   Updated: 2022/12/25 20:13:31 by ahassan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ char	*get_line(char *saved)
 {
 	int		j;
 	char	*line;
-	char	*lst_line;
 
 	j = 0;
 	if (!saved || saved[0] == '\0')
@@ -42,10 +41,7 @@ char	*get_line(char *saved)
 		}
 		j++;
 	}
-	lst_line = ft_substr(saved, 0, ft_strlen(saved));
-	free(saved);
-	saved = NULL;
-	return (lst_line);
+	return (saved);
 }
 
 char	*update_saved(char *saved)

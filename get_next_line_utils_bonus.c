@@ -6,7 +6,7 @@
 /*   By: ahassan <ahassan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/25 14:29:52 by ahassan           #+#    #+#             */
-/*   Updated: 2022/12/25 14:38:41 by ahassan          ###   ########.fr       */
+/*   Updated: 2022/12/25 20:22:46 by ahassan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*ft_strjoin(char *saved, char *buffer)
 	j = 0;
 	if (!saved)
 		saved = (char *)ft_calloc(sizeof(char), 1);
-	if (!saved || !buffer)
+	if (!buffer)
 		return (NULL);
 	joined = (char *)malloc((ft_strlen(saved) + ft_strlen(buffer) + 1));
 	if (!joined)
