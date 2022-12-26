@@ -64,7 +64,10 @@ char	*ft_strjoin(char *saved, char *buffer)
 	i = 0;
 	j = 0;
 	if (!saved)
+	{
 		saved = (char *)ft_calloc(sizeof(char), 1);
+		saved[0] = '\0';
+	}
 	if (!buffer)
 		return (NULL);
 	joined = (char *)malloc((ft_strlen(saved) + ft_strlen(buffer) + 1));

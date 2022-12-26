@@ -6,7 +6,7 @@
 /*   By: ahassan <ahassan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/25 20:15:01 by ahassan           #+#    #+#             */
-/*   Updated: 2022/12/25 22:27:17 by ahassan          ###   ########.fr       */
+/*   Updated: 2022/12/26 13:30:46 by ahassan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,11 @@ char	*update_saved(char *saved)
 	return (NULL);
 }
 
-char	*get_rd(char *saved, int fd)
+char	*get_rd(char *saved, char *buffer, int fd)
 {
 	int		rd;
-	char	*buffer;
 
 	rd = 1;
-	buffer = ft_calloc((BUFFER_SIZE + 1), sizeof(char));
 	while (rd > 0)
 	{
 		rd = read(fd, buffer, BUFFER_SIZE);
@@ -99,14 +97,18 @@ char	*get_next_line(int fd)
 {
 	static char	*saved;
 	char		*line;
+	char		*buffer;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE >= __INT_MAX__)
 		return (NULL);
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	line = NULL;
-	saved = get_rd(saved, fd);
+	saved = get_rd(saved, buffer, fd);
 	if (!saved)
 		return (NULL);
 	line = get_line(saved);
+	if (!saved)
+		return (NULL);
 	if (!line)
 		return (NULL);
 	saved = update_saved(saved);
@@ -115,19 +117,19 @@ char	*get_next_line(int fd)
 
 // int main(void)
 // {
-// 	int fd = open("text.txt", O_RDONLY);
+// 	int fd = open(NULL, O_RDONLY);
 // 	char *line = get_next_line(fd);
 // 	printf("%s", line);
 // 	free(line);
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// 	free(line);
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// 	free(line);
-// 	line = get_next_line(fd);
-// 	printf("%s", line);
-// 	free(line);
+	// line = get_next_line(fd);
+	// printf("%s", line);
+	// free(line);
+	// line = get_next_line(fd);
+	// printf("%s", line);
+	// free(line);
+	// line = get_next_line(fd);
+	// printf("%s", line);
+	// free(line);
 
 // }
 
